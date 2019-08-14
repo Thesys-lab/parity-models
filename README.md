@@ -14,6 +14,13 @@ resilience, please see this [description](train/README.md). We will add a
 broader explanation of the function of a parity model to this README in the
 near future.
 
+## Cloning the repository
+This repository contains submodules. To ensure that all submodules
+are correctly cloned, please clone using:
+```bash
+git clone --recursive https://github.com/Thesys-lab/parity-models.git
+```
+
 ## Repository structure
 * [train](train): Code for training a neural network parity model
 * [clipper-parm](clipper-parm): Code for ParM, a prediction serving system that
