@@ -1,0 +1,19 @@
+{
+  "experiment_id": "ParM",
+  "frontend_type": "c5.9xlarge",
+  "worker_type": "p2.xlarge",
+  "client_type": "m5.xlarge",
+  "model": "resnet18",
+  "s3_path": "",
+
+  "queue_modes": ["single_queue"],
+  "redundancy_modes": ["equal", "coded"],
+  "num_models": 12,
+  "ec_k_val": [2, 3, 4],
+  "batch_sizes": [1],
+  "send_rates": [270],
+  "num_clients": 4,
+  "num_queries": 100000,
+  "num_trials": 3,
+  "background_traffic": [4]
+}

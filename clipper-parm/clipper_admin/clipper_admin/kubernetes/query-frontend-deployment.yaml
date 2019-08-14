@@ -1,0 +1,40 @@
+# Deployment config for query-frontend
+# null values are set to be filled in later.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    ai.clipper.container.label: ""
+    ai.clipper.name: query-frontend
+  name: null # Name must to be set in container_manager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        "prometheus.io/scrape": "true"
+        "prometheus.io/port": "1390"
+      labels:
+        ai.clipper.container.label: ""
+        ai.clipper.name: query-frontend
+        ai.clipper.query_frontend.id: null # This value must be set in container_manager
+    spec:
+      containers:
+      - args:
+        - "--redis_ip=$(REDIS_SERVICE_HOST)"
+        - "--redis_port=$(REDIS_SERVICE_PORT)"
+        image: clipper/query_frontend
+        imagePullPolicy: Always
+        name: query-frontend
+        ports:
+        - containerPort: 7000
+        - containerPort: 1337
+      - args:
+        - "--query_frontend_name" 
+        - "query-frontend:1337"
+        image: "clipper/frontend-exporter" 
+        name: frontend-exporter
+        ports:
+        - containerPort: 1390
+      restartPolicy: Always
+      

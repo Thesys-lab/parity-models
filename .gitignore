@@ -1,0 +1,25 @@
+*.swp
+*__pycache__
+.color_coded
+.ycm_p
+.ycm_extra_conf.py
+*.pyc
+*.egg-info
+
+# build directories
+clipper-parm/release/
+clipper-parm/debug/
+.DS_STORE
+.idea/
+clipper-parm/config.log
+clipper-parm/target/
+clipper-parm/_build/
+
+# scala
+clipper-parm/dependency-reduced-pom.xml
+*.iml
+
+clipper-parm/docker-compose.yml
+clipper-parm/.ipynb_checkpoints
+
+*.pdf

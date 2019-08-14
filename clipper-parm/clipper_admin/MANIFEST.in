@@ -1,0 +1,2 @@
+include README.rst LICENSE.txt clipper_admin/VERSION.txt
+recursive-include tests *.yaml

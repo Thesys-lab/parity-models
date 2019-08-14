@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    ai.clipper.container.label: ""
+    ai.clipper.name: query-frontend
+  name: null # This value must be set in container_manager
+spec:
+  type: NodePort
+  ports:
+  - name: "7000"
+    port: 7000
+    targetPort: 7000
+  selector:
+    ai.clipper.name: query-frontend
+    ai.clipper.query_frontend.id: null # This value must be set in container_manager

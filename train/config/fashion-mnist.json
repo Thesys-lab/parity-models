@@ -1,0 +1,8 @@
+{
+  "num_epoch": 500,
+  "k_vals": [2, 3, 4],
+  "enc_dec_types": [["add", "sub"]],
+  "datasets": ["fashion-mnist"],
+  "models": ["base-mlp", "resnet18"],
+  "losses": ["mse"]
+}

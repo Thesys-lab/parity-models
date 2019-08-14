@@ -1,0 +1,15 @@
+[submodule "clipper-parm/src/libs/redox"]
+	path = clipper-parm/src/libs/redox
+	url = https://github.com/dcrankshaw/redox.git
+[submodule "clipper-parm/src/libs/rapidjson"]
+	path = clipper-parm/src/libs/rapidjson
+	url = https://github.com/dcrankshaw/rapidjson.git
+[submodule "clipper-parm/src/libs/spdlog"]
+	path = clipper-parm/src/libs/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "clipper-parm/bin/yapf"]
+	path = clipper-parm/bin/yapf
+	url = https://github.com/google/yapf.git
+[submodule "clipper-parm/src/libs/dlib"]
+	path = clipper-parm/src/libs/dlib
+	url = https://github.com/davisking/dlib/
