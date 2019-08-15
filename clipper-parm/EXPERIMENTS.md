@@ -170,7 +170,7 @@ on the same node.
 
 **NOTE:** Depending on the capabilities of your machine, this may run slowly
 or overwhelm the machine. We have therefore developed "dummy" models
-to be used specifically in this setting in [local_exp.py](local_exp.py). The
+to be used specifically in this setting in [local_exp.py](run/local_exp.py). The
 models deployed here do not actually perform inference, they just return a
 list of floats. Models are thus computationally inexpensive and unlikely to
 overwhelm a system. We note that this dummy variant is **NOT** intended to
