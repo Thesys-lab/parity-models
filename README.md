@@ -27,6 +27,8 @@ git clone --recursive https://github.com/Thesys-lab/parity-models.git
 employs parity models to impart erasure-coding-based resilience to slowdowns
 and failures.
 
+Please see the READMEs in each of these subdirectories for more details.
+
 ## License
 ```
 Copyright 2019, Carnegie Mellon University
