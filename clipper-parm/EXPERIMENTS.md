@@ -170,8 +170,9 @@ on the same node.
 
 **NOTE:** Depending on the capabilities of your machine, this may run slowly
 or overwhelm the machine. We have therefore developed "dummy" models
-to be used specifically in this setting in [local_exp.py](run/local_exp.py). The
-models deployed here do not actually perform inference, they just return a
+to be used specifically in this setting which will be used when passing the
+`--local` flag to `run_exp.py`, as seen in the command above. The
+models deployed here do not actually perform inference, but simply return a
 list of floats. Models are thus computationally inexpensive and unlikely to
 overwhelm a system. We note that this dummy variant is **NOT** intended to
 be used for performance evaluation, but rather for exercising the scripts
