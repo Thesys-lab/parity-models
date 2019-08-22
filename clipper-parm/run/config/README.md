@@ -58,7 +58,7 @@ on instances used in experiments. Currently supported options include:
 Many configuration
 parameters are represented as lists (e.g., `send_rates`). All combinations of
 configuration parameters are executed. For example, cosider a configuration
-file with the following contents (found in [fig9a.json](fig9a.json):
+file with the following contents (found in [fig9a.json](fig9a.json)):
 ```
   "experiment_id": "ParM",
   "frontend_type": "c5.9xlarge",
