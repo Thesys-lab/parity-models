@@ -150,10 +150,14 @@ To set up a machine, run:
 ```bash
 ./setup.sh
 ```
-Note that you will need to log out and log back in to your machine, and then
+Note that you will need to **log out and log back in** to your user (as done
+above), and then
 execute a followup command (see below) for Docker non-root permissions to
-take effect. You will be prompted to log out and log back into your machine,
-after which you should execute:
+take effect. You will be prompted to log out and log back into your machine:
+```bash
+logout
+```
+Once you have logged back in, you should execute:
 ```bash
 ./setup.sh continue
 ```
