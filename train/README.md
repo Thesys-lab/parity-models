@@ -61,9 +61,10 @@ This repository was developed using the following versions of software and has
 not been tested using other versions.
 * Python 3.6.5
 * PyTorch version 1.0.0 and torchvision
+* CUDA 10.1, if using a GPU
 * Other packages in `requirements.txt`
 
-We suggest using our provided [Dockerfile](dockerfiles/ParityModelDockerfile),
+We stongly recommend using our provided [Dockerfile](dockerfiles/ParityModelDockerfile),
 which installs all necessary prerequisites. We have tested this using Docker version 19.03.1.
 To build the image associated with this Dockerfile, run:
 ```bash
