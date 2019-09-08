@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script should be run from the `parity-models/learn` directory.
+# This script should be run from the `parity-models/train` directory.
 # This script will download the Cat v. Dog dataset that we use as well as the
 # Google Commands dataset.
 

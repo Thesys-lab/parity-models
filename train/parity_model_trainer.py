@@ -326,6 +326,7 @@ class ParityModelTrainer(object):
         if self.only_test:
             if prev_state is None:
                 raise Exception("only_test cannot be set unless --continue_from_file is set")
+            self.cur_epoch = 0  # restart when test only
             self.final_epoch = 1
 
         # Directory to save stats and checkpoints to

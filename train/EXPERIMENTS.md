@@ -1,6 +1,6 @@
 # Training experiments
 We first describe how to run a simple training experiment and then provide
-details for peforming all training runs found in evaluation.
+details for performing all training runs found in evaluation.
 
 ## Setup
 We suggest using our provided [Dockerfile](./dockerfiles/ParityModelDockerfile),
@@ -13,7 +13,7 @@ docker build -t parity-models-pytorch -f ParityModelDockerfile .
 If you would like to train on a GPU using the provided docker container, then
 you will need to install [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker).
 
-## Quickstart
+## Quick start
 We first show how to run an example and then provide
 instructions for other datasets and models.
 
@@ -22,7 +22,7 @@ This example trains an MLP parity model for 10 epochs using the MNIST dataset.
 This should take less than 5 minutes on a laptop.
 
 1. Ensure that you have built the `parity-models-pytorch` Docker image.
-2. Start the Docker container, and attach the `parity-models` volume. **NOTE:** If you want your container to have access to a GPU, then you must substitute the `docker` command below for `nvidia-docker`.
+2. Start the Docker container, and attach the `parity-models` volume. **NOTE:** If you want your container to have access to a GPU, then you must substitute the `docker` command below for `nvidia-docker`. (make sure `nvidia-docker` and `CUDA` are installed to use the GPU)
 ```bash
 docker run -it --rm -v /path/to/parity-models:/workspace/parity-models parity-models-pytorch:latest
 ```
@@ -89,8 +89,11 @@ The files in this directory enable one to continue training from a checkpoint.
 Using the example above, we can continue training from the last epoch of our
 previous run with:
 ```bash
-python3 train_config.py save --continue_from_file save/mnist/base-mlp/k2/mse/add/sub/current.pth
+python3 train_config.py config/your_config.json save --continue_from_file save/mnist/base-mlp/k2/mse/add/sub/current.pth
 ```
+Please make sure the configuration at `config/your_config.json` matches that of the checkpoint file.
+
+To run just the test one can use the `--only_test` flag to the above command(s).
 
 ### Using other datasets and base models
 Due to the size of the datasets and model files used in our evaluation, we are
