@@ -8,7 +8,7 @@ from parity_model_trainer import ParityModelTrainer
 
 def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
                base, dataset, save_dir,
-               base_model_input_size, parity_model):
+               base_model_input_size, parity_model, only_test):
     if ec_k == 2:
         mb_size = 64
     else:
@@ -19,7 +19,7 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
         "ec_k": ec_k,
         "ec_r": 1,
         "batch_size": mb_size,
-        "only_test": False,
+        "only_test": only_test,
 
         "Loss": loss,
 
@@ -237,6 +237,8 @@ if __name__ == "__main__":
                         help="Path to file containing previous training state.")
     parser.add_argument("--checkpoint_cycle", type=int, default=1,
                         help="Number of epochs between model checkpoints")
+    parser.add_argument("--only_test", help="Run only the test. --continue_with_path option must also be set",
+                    action="store_true")
     args = parser.parse_args()
 
     with open(args.config_file, 'r') as infile:
@@ -275,7 +277,7 @@ if __name__ == "__main__":
                         config_map = get_config(num_epoch, ec_k, loss, encoder,
                                                 decoder, model_file, base,
                                                 ds, save_dir, input_size,
-                                                parity_model)
+                                                parity_model, args.only_test)
 
                         if args.continue_from_file:
                             config_map["continue_from_file"] = args.continue_from_file
