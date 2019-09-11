@@ -194,6 +194,15 @@ def get_parity_model(dataset, parity_model_type):
                 }
             }
             input_size = [-1, 3, 32, 32]
+        elif dataset == "cat_v_dog":
+            parity_model = {
+                "class": "torchvision.models.resnet18",
+                "args": {
+                    "pretrained": False,
+                    "num_classes": 2
+                }
+            }
+            input_size = [-1, 3, 224, 224]
         else:
             parity_model = {
                 "class": "base_models.resnet.ResNet18",
