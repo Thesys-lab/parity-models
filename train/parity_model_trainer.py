@@ -106,7 +106,9 @@ class ParityModelTrainer(object):
 
         epoch_loss, epoch_acc_map = stats.averages()
         outfile_fmt = os.path.join(self.save_dir, label + "_{}.txt")
-        util.util.write_vals_dict(outfile_fmt, epoch_acc_map)
+        epoch_map = epoch_acc_map
+        epoch_map["loss"] = epoch_loss
+        util.util.write_vals_dict(outfile_fmt, epoch_map)
 
         top_recon = epoch_acc_map["reconstruction_top1"]
         top_overall = epoch_acc_map["overall_top1"]
