@@ -1,9 +1,8 @@
 # Base Models
-Model files containing the trained parameters
-for many of the base models used are under the
+The files containing trained parameters of base models considered in this
+work can be downloaded by executing [./download_base_models.sh](../download_base_models.sh) 
+in the parent directory. Model files will be saved under the
 [base_model_trained_files](../base_model_trained_files) directory.
-Others are too large to be tracked on git -- ask Jack for access to
-the s3 bucket that they are stored on.
 
 ### Adding a new base model
 If you'd like to add a new base model for evaluation, you need to make to
