@@ -240,8 +240,6 @@ if __name__ == "__main__":
                         help="JSON file containing configuration parameters")
     parser.add_argument("overall_save_dir", type=str,
                         help="Directory to save logs and models to")
-    parser.add_argument("--save_dir", type=str,
-                        help="Directory to save logs and models to")
     parser.add_argument("--continue_from_file",
                         help="Path to file containing previous training state.")
     parser.add_argument("--checkpoint_cycle", type=int, default=1,
