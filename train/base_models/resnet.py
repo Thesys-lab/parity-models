@@ -85,11 +85,11 @@ class Bottleneck(nn.Module):
         return out
 
 
-class ResNet18(nn.Module):
+class ResNet(nn.Module):
 
     def __init__(self, block=BasicBlock, layers=[2, 2, 2, 2], num_classes=10, size_for_cifar=True):
         self.inplanes = 64
-        super(ResNet18, self).__init__()
+        super(ResNet, self).__init__()
         self.size_for_cifar = size_for_cifar
         if size_for_cifar:
             num_channels = 3
@@ -155,3 +155,17 @@ class ResNet18(nn.Module):
         x = self.fc(x)
 
         return x
+
+
+class ResNet18(ResNet):
+    def __init__(self, num_classes=10, size_for_cifar=True):
+        super(ResNet18, self).__init__(
+                block=BasicBlock, layers=[2, 2, 2, 2],
+                num_classes=num_classes, size_for_cifar=size_for_cifar)
+
+
+class ResNet152(ResNet):
+    def __init__(self, num_classes=10, size_for_cifar=True):
+        super(ResNet152, self).__init__(
+                block=BasicBlock, layers=[3, 8, 36, 3],
+                num_classes=num_classes, size_for_cifar=size_for_cifar)

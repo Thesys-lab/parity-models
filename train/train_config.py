@@ -211,6 +211,16 @@ def get_parity_model(dataset, parity_model_type):
                 }
             }
             input_size = [-1, 1, 28, 28]
+    elif parity_model_type == "resnet152":
+        assert dataset == "cifar100", "ResNet152 only used for CIFAR-100"
+        parity_model = {
+            "class": "base_models.resnet.ResNet152",
+            "args": {
+                "size_for_cifar": True,
+                "num_classes": 100
+            }
+        }
+        input_size = [-1, 3, 32, 32]
     elif parity_model_type == "vgg11":
         assert dataset == "gcommands", "VGG currently only used for GCommand"
         parity_model = {

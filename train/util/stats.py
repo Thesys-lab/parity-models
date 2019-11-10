@@ -7,7 +7,7 @@ def get_top_k(k, decoded, compare, mask):
     entry in ``decoded`` has the value of ``compare`` in its top-k.
     """
     rep_compare = compare.unsqueeze(2).repeat(1, 1, k)
-    return torch.sum((decoded.topk(k)[1] == rep_compare) * mask).item()
+    return torch.sum((decoded.topk(k)[1] == rep_compare).float() * mask.float()).item()
 
 
 class StatsTracker(object):
@@ -90,8 +90,8 @@ class StatsTracker(object):
         max_outputs = torch.max(base_model_outputs, dim=2)[1]
 
         self.acc_map["reconstruction_top1"] += torch.sum(
-            (max_decoded == max_outputs) * mask).item()
-        top1_correct = torch.sum((max_decoded == true_labels) * mask).item()
+            (max_decoded == max_outputs).float() * mask.float()).item()
+        top1_correct = torch.sum((max_decoded == true_labels).float() * mask.float()).item()
         self.acc_map["overall_top1"] += top1_correct
         self.running_top1 += top1_correct
 
