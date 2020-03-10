@@ -81,7 +81,7 @@ experiment. These steps are complete when the message `Starting run on frontend`
 appears. From steps 4 on, this connection is no longer necessary, and
 experiments will continue to execute even if the ssh connection terminates.
 In this event, the final destinations to which experimental results are saved
-will be printed at the bottom of `~/runne_log.txt` on the frontend instance.
+will be printed at the bottom of `~/runner_log.txt` on the frontend instance.
 
 If your ssh connection remains active through the duration of the experiments,
 the local runner will copy back results from the remote frontend to your local
