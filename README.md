@@ -45,3 +45,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+## Support
+We graciously acknowledge support from the National Science Foundation 
+(NSF) under grant CNS-1850483 and an NSF Graduate Research Fellowship 
+(DGE-1745016 and DGE-1252522).
