@@ -1,6 +1,3 @@
-**NOTE for AEC: Please see [EXPERIMENTS](EXPERIMENTS.md) for information on scripts used
-for launching experiments.**
-
 # Parity Models
 This repository contains the code used for developing and evaluating parity
 models. A parity model is a computational unit that enables the use of ideas
@@ -13,6 +10,12 @@ neural networks. For a brief overview of how a parity model enables this
 resilience, please see this [description](train/README.md). We will add a
 broader explanation of the function of a parity model to this README in the
 near future.
+
+This repository originated as the artifact associated with the SOSP 2019 paper
+[Parity Models: Erasure-Coded Resilience for Prediction Serving Systems](https://dl.acm.org/doi/10.1145/3341301.3359654).
+It has since evolved beyond serving this paper in isolation. The original
+artifact associated with the SOSP 2019 paper is located in the
+`sosp2019-artifact` branch.
 
 ## Cloning the repository
 This repository contains submodules. To ensure that all submodules
