@@ -97,9 +97,12 @@ To run just the test one can use the `--only_test` flag to the above command(s).
 
 ### Using other datasets and base models
 Due to the size of the datasets and model files used in our evaluation, we are
-unable to keep all datasets and models on Github. We have hosted the remaining
-datasets and model weights in a public AWS S3 bucket. Please follow the
-commands below to access these.
+unable to keep all datasets and models on Github. All model files that are less
+than 100 MB in size are available directly in this repository. We have hosted
+the remaining datasets and model files in a public AWS S3 bucket. Please
+follow the commands below to access these. Please raise an issue if you are
+unable to access AWS, and we will work out a way to provide you with the
+files that you need.
 
 **Download the datasets used in our evaluation:**
 ```bash
