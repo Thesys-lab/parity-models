@@ -4,6 +4,6 @@ FROM nvcr.io/nvidia/pytorch:19.01-py3
 
 RUN apt-get update
 
-RUN pip install Pillow==5.0.0 tqdm==4.20.0 pandas==0.22.0 numpy==1.14.0 librosa==0.6.2
+RUN pip install Pillow==6.2.0 tqdm==4.20.0 pandas==0.22.0 numpy==1.14.0 librosa==0.6.2
 
 # vim: set filetype=dockerfile:
