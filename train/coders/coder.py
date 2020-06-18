@@ -16,8 +16,8 @@ class Coder(nn.Module):
                 Number of input units for a forward pass of the coder.
             num_out: int
                 Number of output units from a forward pass of the coder.
-            in_dim: in_dim
-                Dimension of flattened inputs to the coder.
+            in_dim: list
+                List of sizes of input as (batch, num_channels, height, width).
         """
         super().__init__()
         self.num_in = num_in
@@ -31,6 +31,44 @@ class Coder(nn.Module):
                 Input data for a forward pass of the coder.
         """
         pass
+
+
+class Encoder(Coder):
+    """
+    Class for implementing encoders. All new encoders should derive from this
+    class.
+    """
+
+    def __init__(self, num_in, num_out, in_dim):
+        super().__init__(num_in, num_out, in_dim)
+        if len(in_dim) == 2:
+            # Some `in_dim` values for square inputs with a single input
+            # channel are represented using only a single value. We reconstruct
+            # these into a (num_channels, height, width) here.
+            flattened_dim = in_dim[1]
+            if int(flattened_dim ** 0.5) ** 2 != flattened_dim:
+                raise Exception(
+                "Expected square flattened input, but received flattened "
+                "input of size " + str(flattened_dim))
+            sqrt_flattened = int(flattened_dim ** 0.5)
+            self.in_dim = [-1, 1, sqrt_flattened, sqrt_flattened]
+        else:
+            self.in_dim = in_dim
+
+    def forward(self, in_data):
+        pass
+
+    def pre_tensor_transforms(self):
+        """
+        Returns
+        -------
+            List of `torchvision.transforms.Transform` objects that should be
+            applied to data samples prior to being encoded. The transformations
+            will be performed just before the data sample has been reformatted
+            as a PyTorch `Tensor` object using
+            `torchvision.transforms.ToTennsor()`.
+        """
+        return []
 
 
 class Decoder(Coder):

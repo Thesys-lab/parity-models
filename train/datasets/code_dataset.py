@@ -94,7 +94,7 @@ class CodeDataset(data.Dataset):
         # If extra transformations are passed, create a new dataset containing
         # these so that a caller can pull new, transformed samples with calls
         # to `__getitem__`.
-        if name == "train" and code_dataset is not None:
+        if code_dataset is not None:
             self.dataset = code_dataset
             self.extra_transforms = True
         else:
@@ -126,9 +126,9 @@ class CodeDataset(data.Dataset):
 
     def encoder_in_dim(self):
         """
-        Returns dimensionality of input that will be given to the encoder.
+        Returns size of each input that will be given to the encoder.
         """
-        return self.data.size(1) // self.num_channels
+        return self.dataset[0].size()
 
     def decoder_in_dim(self):
         """
@@ -223,25 +223,38 @@ class FolderCodeDataset(CodeDataset):
 
 
 class MNISTCodeDataset(DownloadCodeDataset):
-    def __init__(self, name, base_model, ec_k):
+    def __init__(self, name, base_model, ec_k, encoder_transforms):
         base_dataset = datasets.MNIST
         base_dataset_dir = "data/mnist"
+        code_transform = transforms.Compose([
+                *encoder_transforms,
+                transforms.ToTensor()
+                ])
+
         super().__init__(name=name,
                          base_model=base_model,
                          base_dataset=base_dataset,
                          base_dataset_dir=base_dataset_dir,
-                         ec_k=ec_k, num_classes=10)
+                         ec_k=ec_k, num_classes=10,
+                         code_transform=code_transform)
+
 
 
 class FashionMNISTCodeDataset(DownloadCodeDataset):
-    def __init__(self, name, base_model, ec_k):
+    def __init__(self, name, base_model, ec_k, encoder_transforms):
         base_dataset = datasets.FashionMNIST
         base_dataset_dir = "data/fashion-mnist"
+        code_transform = transforms.Compose([
+                *encoder_transforms,
+                transforms.ToTensor()
+                ])
+
         super().__init__(name=name,
                          base_model=base_model,
                          base_dataset=base_dataset,
                          base_dataset_dir=base_dataset_dir,
-                         ec_k=ec_k, num_classes=10)
+                         ec_k=ec_k, num_classes=10,
+                         code_transform=code_transform)
 
 
 class CIFARCodeDataset(DownloadCodeDataset):
@@ -264,13 +277,22 @@ class CIFARCodeDataset(DownloadCodeDataset):
 
         # We add extra transformations for CIFAR-10 as is done in:
         #   https://github.com/kuangliu/pytorch-cifar
-        code_transform = transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize(
-                mean=(0.4914, 0.4822, 0.4465),
-                std=(0.2023, 0.1994, 0.2010))])
+        if name == "train":
+            code_transform = transforms.Compose([
+                transforms.RandomCrop(32, padding=4),
+                transforms.RandomHorizontalFlip(),
+                *encoder_transforms,
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=(0.4914, 0.4822, 0.4465),
+                    std=(0.2023, 0.1994, 0.2010))])
+        else:
+            code_transform = transforms.Compose([
+                *encoder_transforms,
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=(0.4914, 0.4822, 0.4465),
+                    std=(0.2023, 0.1994, 0.2010))])
 
         super().__init__(name=name,
                          base_model=base_model,
@@ -282,19 +304,21 @@ class CIFARCodeDataset(DownloadCodeDataset):
 
 
 class CIFAR10CodeDataset(CIFARCodeDataset):
-    def __init__(self, name, base_model, ec_k):
+    def __init__(self, name, base_model, ec_k, encoder_transforms):
         super().__init__(name=name, base_model=base_model,
-                         ec_k=ec_k, num_classes=10)
+                         ec_k=ec_k, num_classes=10,
+                         encoder_transforms=encoder_transforms)
 
 
 class CIFAR100CodeDataset(CIFARCodeDataset):
-    def __init__(self, name, base_model, ec_k):
+    def __init__(self, name, base_model, ec_k, encoder_transforms):
         super().__init__(name=name, base_model=base_model,
-                         ec_k=ec_k, num_classes=100)
+                         ec_k=ec_k, num_classes=100,
+                         encoder_transforms=encoder_transforms)
 
 
 class CatDogCodeDataset(FolderCodeDataset):
-    def __init__(self, name, base_model, ec_k):
+    def __init__(self, name, base_model, ec_k, encoder_transforms):
         dataset_dir = "data/cat_v_dog/{}"
         base_dataset_dir = dataset_dir.format(name)
         num_classes = 2
@@ -313,13 +337,20 @@ class CatDogCodeDataset(FolderCodeDataset):
             code_transform = transforms.Compose([
                 transforms.RandomResizedCrop(224),
                 transforms.RandomHorizontalFlip(),
+                *encoder_transforms,
                 transforms.ToTensor(),
                 transforms.Normalize(
                     mean=[0.485, 0.456, 0.406],
                     std=[0.229, 0.224, 0.225])
             ])
         else:
-            code_transform = None
+            code_transform = transforms.Compose([
+                *encoder_transforms,
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406],
+                    std=[0.229, 0.224, 0.225])
+            ])
 
         super().__init__(name=name, base_model=base_model, ec_k=ec_k,
                          base_dataset_dir=base_dataset_dir,
@@ -328,7 +359,8 @@ class CatDogCodeDataset(FolderCodeDataset):
                          code_transform=code_transform)
 
 
-def get_dataloaders(dataset_path, base_model, ec_k, batch_size):
+def get_dataloaders(dataset_path, base_model, ec_k, batch_size,
+                    encoder_transforms):
     """
     Generates training, validation, and test datasets.
 
@@ -345,6 +377,9 @@ def get_dataloaders(dataset_path, base_model, ec_k, batch_size):
     batch_size: int
         Number of samples (group of `ec_k` inputs) to be run in a single
         minibatch.
+    encoder_transforms: list
+        List of transforms to be applied on inputs before being converted
+        to a tensor.
 
     Returns
     -------
@@ -354,17 +389,20 @@ def get_dataloaders(dataset_path, base_model, ec_k, batch_size):
     train_dataset = construct(dataset_path,
                               {"name": "train",
                                "base_model": base_model,
-                               "ec_k": ec_k})
+                               "ec_k": ec_k,
+                               "encoder_transforms": encoder_transforms})
 
     val_dataset = construct(dataset_path,
                             {"name": "val",
                              "base_model": base_model,
-                             "ec_k": ec_k})
+                             "ec_k": ec_k,
+                             "encoder_transforms": encoder_transforms})
 
     test_dataset = construct(dataset_path,
                              {"name": "test",
                               "base_model": base_model,
-                              "ec_k": ec_k})
+                              "ec_k": ec_k,
+                               "encoder_transforms": encoder_transforms})
 
     # Each sample for the encoder/decoder consists of `ec_k` images from
     # the underlying dataset. Thus, the batch size for drawing samples from

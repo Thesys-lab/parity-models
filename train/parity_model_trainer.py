@@ -275,22 +275,21 @@ class ParityModelTrainer(object):
         self.base_model = try_cuda(self.base_model)
         self.base_model.eval()
 
+        self.enc_model = construct(config_map["Encoder"],
+                                   {"ec_k": self.ec_k,
+                                    "ec_r": self.ec_r,
+                                    "in_dim": base_model_input_size})
+
         trdl, vdl, tsdl = get_dataloaders(config_map["Dataset"],
                                           self.base_model, self.ec_k,
-                                          self.batch_size)
+                                          self.batch_size,
+                                          self.enc_model.pre_tensor_transforms())
         self.train_dataloader = trdl
         self.val_dataloader = vdl
         self.test_dataloader = tsdl
 
         self.loss_fn = construct(config_map["Loss"])
-
-        encoder_in_dim = self.val_dataloader.dataset.encoder_in_dim()
         decoder_in_dim = self.val_dataloader.dataset.decoder_in_dim()
-        self.enc_model = construct(config_map["Encoder"],
-                                   {"ec_k": self.ec_k,
-                                    "ec_r": self.ec_r,
-                                    "in_dim": encoder_in_dim})
-
         self.dec_model = construct(config_map["Decoder"],
                                    {"ec_k": self.ec_k,
                                     "ec_r": self.ec_r,

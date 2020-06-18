@@ -7,8 +7,8 @@ from parity_model_trainer import ParityModelTrainer
 
 
 def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
-               base, dataset, save_dir,
-               base_model_input_size, parity_model, only_test):
+               base, dataset, save_dir, base_model_input_size, parity_model,
+               only_test):
     if ec_k == 2:
         mb_size = 64
     else:
@@ -55,10 +55,15 @@ def get_encoder(encoder_type, ec_k):
         conf = {
             "class": "coders.summation.AdditionEncoder"
         }
+    elif encoder_type == "concat":
+        conf = {
+            "class": "coders.image.ConcatenationEncoder"
+        }
 
-        return conf
     else:
         raise Exception("Invalid encoder type: {}".format(encoder_type))
+
+    return conf
 
 
 def get_decoder(decoder_type):
