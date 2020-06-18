@@ -5,10 +5,11 @@ import torch.utils.data as data
 from tqdm import tqdm
 
 from base_models.base_model_wrapper import BaseModelWrapper
+from datasets.code_dataset import get_dataloaders
+from loss.masked_loss import MaskedLoss
 import util.stats
 import util.util
 from util.util import construct, try_cuda
-from datasets.code_dataset import get_dataloaders
 
 
 class ParityModelTrainer(object):
@@ -90,13 +91,17 @@ class ParityModelTrainer(object):
             mb_true_labels = try_cuda(mb_true_labels.view(-1, self.ec_k))
 
             if do_step:
-                self.opt.zero_grad()
+                if self.train_parity_model: self.parity_model_opt.zero_grad()
+                if self.train_encoder: self.encoder_opt.zero_grad()
+                if self.train_decoder: self.decoder_opt.zero_grad()
 
             loss = self.__forward(mb_data, mb_labels, mb_true_labels, stats)
 
             if do_step:
                 loss.backward()
-                self.opt.step()
+                if self.train_parity_model: self.parity_model_opt.step()
+                if self.train_encoder: self.encoder_opt.step()
+                if self.train_decoder: self.decoder_opt.step()
 
             if do_print:
                 rloss, rtop1, rtop5 = stats.running_averages()
@@ -176,7 +181,7 @@ class ParityModelTrainer(object):
             mb_data = mb_data.view(-1, self.ec_k, mb_data.size(-1) // 3)
 
         # Perform the encoding
-        parity = self.enc_model(mb_data)
+        parity = self.encoder(mb_data)
 
         # Perform parity model computation
         parity_output = self.parity_model(parity)
@@ -186,11 +191,13 @@ class ParityModelTrainer(object):
         # parity_output = parity_output.view(
         #    batch_size, -1, base_parity_output.size(-1))
 
-        # Calculate loss
-        parity_model_target = self.dec_model.combine_labels(mb_labels)
-        loss = self.loss_fn(
-            parity_output, parity_model_target.view(-1, mb_labels.size(-1)))
-        stats.update_loss(loss.item())
+        # If the decoder is not to be trained, then loss is calculated by
+        # comparing the output of the parity model to the output required by
+        # the decoder for exact recoery.
+        if not self.train_decoder:
+            parity_model_target = self.decoder.combine_labels(mb_labels)
+            loss = self.loss_fn(
+                parity_output, parity_model_target.view(-1, mb_labels.size(-1)))
 
         # The input to the decoder consists of the concatenation of the output of
         # running the parity through the base model and the available base model
@@ -214,7 +221,7 @@ class ParityModelTrainer(object):
         in_decode = in_decode * mb_emask
 
         # Perform decoding
-        decoded = self.dec_model(in_decode)
+        decoded = self.decoder(in_decode)
 
         # Prepare labels for calculating accuracy
         _, num_out, out_dim = mb_labels.size()
@@ -222,6 +229,16 @@ class ParityModelTrainer(object):
             batch_size * num_erasure_scenarios, num_out, out_dim)
         true_labels = mb_true_labels.repeat(1, num_erasure_scenarios).view(
             batch_size * num_erasure_scenarios, num_out)
+
+        # If the decoder is to be trained, then loss is calculated by comparing
+        # the decoded outputs to the output that would have been available if
+        # the original output was available.
+        if self.train_decoder:
+            predictions = decoded.view(-1, out_dim)
+            loss = self.loss_fn(predictions, labels.view(-1, out_dim),
+                                mb_amask.view(-1).float())
+
+        stats.update_loss(loss.item())
         stats.update_accuracies(decoded, labels, true_labels, mb_amask)
         return loss
 
@@ -236,10 +253,20 @@ class ParityModelTrainer(object):
 
         save_dict = {
             "epoch": self.cur_epoch,
-            "best_val_acc": self.best_recon_accuracy,
-            "parity_model": self.parity_model.state_dict(),
-            "opt": self.opt.state_dict(),
+            "best_val_acc": self.best_recon_accuracy
         }
+
+        if self.train_parity_model:
+            save_dict["parity_model"] = self.parity_model.state_dict()
+            save_dict["opt"] = self.parity_model_opt.state_dict()
+
+        if self.train_encoder:
+            save_dict["encoder"] = self.encoder.state_dict()
+            save_dict["encoder_opt"] = self.encoder_opt.state_dict()
+
+        if self.train_decoder:
+            save_dict["decoder"] = self.decoder.state_dict()
+            save_dict["decoder_opt"] = self.decoder_opt.state_dict()
 
         if self.cur_epoch % self.checkpoint_cycle == 0:
             util.util.save_checkpoint(
@@ -275,7 +302,7 @@ class ParityModelTrainer(object):
         self.base_model = try_cuda(self.base_model)
         self.base_model.eval()
 
-        self.enc_model = construct(config_map["Encoder"],
+        self.encoder = construct(config_map["Encoder"],
                                    {"ec_k": self.ec_k,
                                     "ec_r": self.ec_r,
                                     "in_dim": base_model_input_size})
@@ -283,33 +310,62 @@ class ParityModelTrainer(object):
         trdl, vdl, tsdl = get_dataloaders(config_map["Dataset"],
                                           self.base_model, self.ec_k,
                                           self.batch_size,
-                                          self.enc_model.pre_tensor_transforms())
+                                          self.encoder.pre_tensor_transforms())
         self.train_dataloader = trdl
         self.val_dataloader = vdl
         self.test_dataloader = tsdl
 
-        self.loss_fn = construct(config_map["Loss"])
+        self.train_parity_model = config_map["train_parity_model"]
+        self.train_encoder = config_map["train_encoder"]
+        self.train_decoder = config_map["train_decoder"]
+
+        if self.train_decoder:
+            self.loss_fn = MaskedLoss(config_map["Loss"])
+        else:
+            self.loss_fn = construct(config_map["Loss"])
         decoder_in_dim = self.val_dataloader.dataset.decoder_in_dim()
-        self.dec_model = construct(config_map["Decoder"],
+        self.decoder = construct(config_map["Decoder"],
                                    {"ec_k": self.ec_k,
                                     "ec_r": self.ec_r,
                                     "in_dim": decoder_in_dim})
 
         # Move our encoder, decoder, and loss functions to GPU, if available
-        self.enc_model = try_cuda(self.enc_model)
-        self.dec_model = try_cuda(self.dec_model)
-        self.enc_model.eval()
-        self.dec_model.eval()
+        self.encoder = try_cuda(self.encoder)
+        self.decoder = try_cuda(self.decoder)
         self.loss_fn = try_cuda(self.loss_fn)
 
         underlying_parity_model = construct(config_map["ParityModel"])
-        util.util.init_weights(underlying_parity_model)
+        if self.train_parity_model:
+            util.util.init_weights(underlying_parity_model)
+        else:
+            underlying_base_model.load_state_dict(
+                torch.load(config_map["base_model_file"]))
+
         base_model_input_size = config_map["base_model_input_size"]
         self.parity_model = BaseModelWrapper(underlying_parity_model,
                                              base_model_input_size)
-        self.opt = construct(config_map["Optimizer"],
-                             {"params": self.parity_model.parameters()})
+
+        if self.train_parity_model:
+            self.parity_model_opt = construct(config_map["Optimizer"],
+                                 {"params": self.parity_model.parameters()})
+        else:
+            self.parity_model.eval()
+
+        if self.train_encoder:
+            self.encoder_opt = construct(config_map["Optimizer"],
+                                 {"params": self.encoder.parameters()})
+        else:
+            self.encoder.eval()
+
+        if self.train_decoder:
+            self.decoder_opt = construct(config_map["Optimizer"],
+                                 {"params": self.decoder.parameters()})
+        else:
+            self.decoder.eval()
+
         self.parity_model = try_cuda(self.parity_model)
+        self.encoder = try_cuda(self.encoder)
+        self.decoder = try_cuda(self.decoder)
 
         self.cur_epoch = 0
         self.best_recon_accuracy = 0.0
@@ -318,10 +374,20 @@ class ParityModelTrainer(object):
         # If we are loading from a previous state, update our encoder, decoder,
         # optimizers, and current status of training so that we can continue.
         if prev_state is not None:
-            self.parity_model.load_state_dict(prev_state["parity_model"])
+            if self.train_parity_model:
+                self.parity_model.load_state_dict(prev_state["parity_model"])
+                self.parity_model_opt.load_state_dict(prev_state["opt"])
+
+            if self.train_encoder:
+                self.encoder.load_state_dict(prev_state["encoder"])
+                self.encoder_opt.load_state_dict(prev_state["encoder_opt"])
+
+            if self.train_decoder:
+                self.decoder.load_state_dict(prev_state["decoder"])
+                self.decoder_opt.load_state_dict(prev_state["decoder_opt"])
+
             self.cur_epoch = prev_state["epoch"]
             self.best_recon_accuracy = prev_state["best_val_acc"]
-            self.opt.load_state_dict(prev_state["opt"])
 
         self.only_test = config_map["only_test"]
         if self.only_test:

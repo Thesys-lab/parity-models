@@ -1,0 +1,11 @@
+{
+  "num_epoch": 500,
+  "k_vals": [2, 3, 4],
+  "enc_dec_types": [["conv", "mlp"]],
+  "datasets": ["cifar10"],
+  "models": ["resnet18"],
+  "losses": ["mse"],
+  "train_parity_model": true,
+  "train_encoder": true,
+  "train_decoder": true
+}
