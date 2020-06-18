@@ -258,7 +258,7 @@ class FashionMNISTCodeDataset(DownloadCodeDataset):
 
 
 class CIFARCodeDataset(DownloadCodeDataset):
-    def __init__(self, name, base_model, ec_k, num_classes):
+    def __init__(self, name, base_model, ec_k, num_classes, encoder_transforms):
         assert num_classes == 10 or num_classes == 100
 
         if num_classes == 10:

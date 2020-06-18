@@ -1,0 +1,8 @@
+{
+  "num_epoch": 1000,
+  "k_vals": [2, 4],
+  "enc_dec_types": [["concat", "sub"]],
+  "datasets": ["cifar10"],
+  "models": ["resnet18"],
+  "losses": ["mse"]
+}
