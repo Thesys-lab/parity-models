@@ -17,13 +17,6 @@ It has since evolved beyond serving this paper in isolation. The original
 artifact associated with the SOSP 2019 paper is located in the
 `sosp2019-artifact` branch.
 
-## Cloning the repository
-This repository contains submodules. To ensure that all submodules
-are correctly cloned, please clone using:
-```bash
-git clone --recursive https://github.com/Thesys-lab/parity-models.git
-```
-
 ## Repository structure
 * [train](train): Code for training a neural network parity model
 * [clipper-parm](clipper-parm): Code for ParM, a prediction serving system that
@@ -31,6 +24,17 @@ employs parity models to impart erasure-coding-based resilience to slowdowns
 and failures.
 
 Please see the READMEs in each of these subdirectories for more details.
+
+## Cloning the repository
+The portion of the repository implementing ParM contains submodules.
+To ensure that all submodules are correctly cloned, please clone using:
+```bash
+git clone --recursive https://github.com/Thesys-lab/parity-models.git
+```
+
+If you are only interested in the training portion of the repository you need
+not use the `--recursive` flag. Omitting this flag should result in a faster
+clone.
 
 ## License
 ```
