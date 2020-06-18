@@ -7,13 +7,13 @@ from coders.coder import Encoder, Decoder
 from util.util import get_flattened_dim
 
 
-def create_mlp(ec_k, ec_r, inout_dim, layer_sizes_multiplier):
+def create_mlp(num_in, num_out, inout_dim, layer_sizes_multiplier):
     """
     Parameters
     ----------
-        ec_k: int
+        num_in: int
             Number of input units for a forward pass of the coder.
-        ec_r: int
+        num_out: int
             Number of output units from a forward pass of the coder.
         inout_dim: int
             Dimensionality of input units for a forward pass of the coder.
@@ -29,7 +29,7 @@ def create_mlp(ec_k, ec_r, inout_dim, layer_sizes_multiplier):
             Module containing MLP to be used for this coder.
     """
     nn_modules = nn.ModuleList()
-    prev_size = ec_k * inout_dim
+    prev_size = num_in * inout_dim
     for i, size in enumerate(layer_sizes_multiplier):
         my_size = inout_dim * size
         l = nn.Linear(prev_size, my_size)
@@ -37,13 +37,13 @@ def create_mlp(ec_k, ec_r, inout_dim, layer_sizes_multiplier):
         nn_modules.append(l)
         nn_modules.append(nn.ReLU())
 
-    nn_modules.append(nn.Linear(prev_size, ec_r * inout_dim))
+    nn_modules.append(nn.Linear(prev_size, num_out * inout_dim))
     return nn.Sequential(*nn_modules)
 
 
 class MLPEncoder(Encoder):
     def __init__(self, ec_k, ec_r, in_dim):
-        super().__init__(num_in, num_out, in_dim, layer_sizes_multiplier)
+        super().__init__(ec_k, ec_r, in_dim)
         self.inout_dim = get_flattened_dim(in_dim)
         layer_sizes_multiplier = [ec_k]
         self.nn = create_mlp(ec_k, ec_r, self.inout_dim, layer_sizes_multiplier)
@@ -57,10 +57,12 @@ class MLPEncoder(Encoder):
 
 class MLPDecoder(Decoder):
     def __init__(self, ec_k, ec_r, in_dim):
-        super().__init__(num_in, num_out, in_dim, layer_sizes_multiplier)
+        super().__init__(ec_k, ec_r, in_dim)
         self.inout_dim = get_flattened_dim(in_dim)
-        layer_sizes_multiplier = [ec_k, ec_r]
-        self.nn = create_mlp(ec_k, ec_r, self.inout_dim, layer_sizes_multiplier)
+        self.num_in = ec_k + ec_r
+        self.num_out = ec_k
+        layer_sizes_multiplier = [self.num_in, self.num_out]
+        self.nn = create_mlp(self.num_in, self.num_out, self.inout_dim, layer_sizes_multiplier)
 
     def forward(self, in_data):
         # Flatten inputs

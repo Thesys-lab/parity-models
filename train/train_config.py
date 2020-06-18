@@ -41,9 +41,9 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
         "ParityModel": parity_model,
         "Dataset": dataset,
 
-        "train_encoder": cfg.get("train_encoder", default=False),
-        "train_decoder": cfg.get("train_decoder", default=False),
-        "train_parity_model": cfg.get("train_parity_model", default=True),
+        "train_encoder": cfg.get("train_encoder", False),
+        "train_decoder": cfg.get("train_decoder", False),
+        "train_parity_model": cfg.get("train_parity_model", True),
     }
 
 

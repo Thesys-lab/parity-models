@@ -5,10 +5,11 @@ import torch.utils.data as data
 from tqdm import tqdm
 
 from base_models.base_model_wrapper import BaseModelWrapper
+from datasets.code_dataset import get_dataloaders
+from loss.masked_loss import MaskedLoss
 import util.stats
 import util.util
 from util.util import construct, try_cuda
-from datasets.code_dataset import get_dataloaders
 
 
 class ParityModelTrainer(object):
@@ -234,7 +235,8 @@ class ParityModelTrainer(object):
         # the original output was available.
         if self.train_decoder:
             predictions = decoded.view(-1, out_dim)
-            loss = self.loss_fn(predictions, targets, mb_amask.view(-1).float())
+            loss = self.loss_fn(predictions, labels.view(-1, out_dim),
+                                mb_amask.view(-1).float())
 
         stats.update_loss(loss.item())
         stats.update_accuracies(decoded, labels, true_labels, mb_amask)
@@ -313,7 +315,14 @@ class ParityModelTrainer(object):
         self.val_dataloader = vdl
         self.test_dataloader = tsdl
 
-        self.loss_fn = construct(config_map["Loss"])
+        self.train_parity_model = config_map["train_parity_model"]
+        self.train_encoder = config_map["train_encoder"]
+        self.train_decoder = config_map["train_decoder"]
+
+        if self.train_decoder:
+            self.loss_fn = MaskedLoss(config_map["Loss"])
+        else:
+            self.loss_fn = construct(config_map["Loss"])
         decoder_in_dim = self.val_dataloader.dataset.decoder_in_dim()
         self.decoder = construct(config_map["Decoder"],
                                    {"ec_k": self.ec_k,
