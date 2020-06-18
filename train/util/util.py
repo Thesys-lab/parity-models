@@ -31,12 +31,14 @@ def get_flattened_dim(in_dim):
     Returns
     -------
         int
-            Flattened version of in_dm (i.e., num_channels * height * width).
+            Flattened version of a single channel (i.e., height * width).
     """
     if isinstance(in_dim, int):
         return in_dim
-    else:
-        return reduce((lambda x, y: x * y), in_dim[1:])
+    elif len(in_dim) == 2:
+        return in_dim[-1]
+    elif len(in_dim) > 2:
+        return in_dim[-1] * in_dim[-2]
 
 
 def get_from_module(attrname):
