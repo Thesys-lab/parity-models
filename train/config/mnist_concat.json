@@ -1,0 +1,8 @@
+{
+  "num_epoch": 500,
+  "k_vals": [2, 4],
+  "enc_dec_types": [["concat", "sub"]],
+  "datasets": ["mnist"],
+  "models": ["base-mlp", "resnet18"],
+  "losses": ["mse"]
+}

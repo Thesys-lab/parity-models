@@ -1,11 +1,10 @@
 import torch
 from torch import nn
 
-from coders.coder import Coder, Decoder
-import util.util
+from coders.coder import Encoder, Decoder
 
 
-class AdditionEncoder(Coder):
+class AdditionEncoder(Encoder):
     """
     Adds inputs together.
     """
