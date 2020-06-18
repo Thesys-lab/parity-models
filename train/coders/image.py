@@ -1,6 +1,4 @@
-"""
-Encoders and decoders specific to tasks that operate over images.
-"""
+""" Encoders and decoders specific to tasks that operate over images. """
 
 import torch
 import torchvision.transforms as transforms

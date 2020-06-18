@@ -1,4 +1,5 @@
 """ Utility functions """
+from functools import reduce
 import os
 from shutil import copyfile
 import torch
@@ -19,6 +20,23 @@ def construct(obj_map, extra_kwargs={}):
     kwargs.update(extra_kwargs)
     c = get_from_module(classname)
     return c(**kwargs)
+
+
+def get_flattened_dim(in_dim):
+    """
+    Parameters
+    ----------
+        in_dim: int or list
+            List of sizes of input as (batch, num_channels, height, width).
+    Returns
+    -------
+        int
+            Flattened version of in_dm (i.e., num_channels * height * width).
+    """
+    if isinstance(in_dim, int):
+        return in_dim
+    else:
+        return reduce((lambda x, y: x * y), in_dim[1:])
 
 
 def get_from_module(attrname):

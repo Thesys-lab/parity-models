@@ -8,7 +8,7 @@ from parity_model_trainer import ParityModelTrainer
 
 def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
                base, dataset, save_dir, base_model_input_size, parity_model,
-               only_test):
+               only_test, cfg):
     if ec_k == 2:
         mb_size = 64
     else:
@@ -40,6 +40,10 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
 
         "ParityModel": parity_model,
         "Dataset": dataset,
+
+        "train_encoder": cfg.get("train_encoder", default=False),
+        "train_decoder": cfg.get("train_decoder", default=False),
+        "train_parity_model": cfg.get("train_parity_model", default=True),
     }
 
 
@@ -52,24 +56,34 @@ def get_loss(loss_type):
 
 def get_encoder(encoder_type, ec_k):
     if encoder_type == "add":
-        conf = {
+        return {
             "class": "coders.summation.AdditionEncoder"
         }
     elif encoder_type == "concat":
-        conf = {
+        return {
             "class": "coders.image.ConcatenationEncoder"
+        }
+    elif encoder_type == "mlp":
+        return {
+            "class": "coders.mlp.MLPEncoder"
+        }
+    elif encoder_type == "conv":
+        return {
+            "class": "coders.conv.ConvEncoder"
         }
 
     else:
         raise Exception("Invalid encoder type: {}".format(encoder_type))
-
-    return conf
 
 
 def get_decoder(decoder_type):
     if decoder_type == "sub":
         return {
             "class": "coders.summation.SubtractionDecoder"
+        }
+    elif decoder_type == "mlp":
+        return {
+            "class": "coders.mlp.MLPDecoder"
         }
     else:
         raise Exception("Invalid decoder type: {}".format(decoder_type))
@@ -299,7 +313,8 @@ if __name__ == "__main__":
                         config_map = get_config(num_epoch, ec_k, loss, encoder,
                                                 decoder, model_file, base,
                                                 ds, save_dir, input_size,
-                                                parity_model, args.only_test)
+                                                parity_model, args.only_test,
+                                                cfg)
 
                         if args.continue_from_file:
                             config_map["continue_from_file"] = args.continue_from_file
