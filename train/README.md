@@ -102,10 +102,6 @@ docker build -t parity-models-pytorch -f ParityModelDockerfile .
 If you would like to train on a GPU using the provided docker container, then
 you will need to install [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker).
 
-### Quick start
-We first show how to run an example and then provide
-instructions for other datasets and models.
-
 ### MNIST Example
 This example trains an MLP parity model for 10 epochs using the MNIST dataset.
 This should take less than 5 minutes on a laptop.
@@ -119,7 +115,7 @@ docker run -it --rm -v /path/to/parity-models:/workspace/parity-models parity-mo
 ```bash
 # These commands should be run from within the Docker container
 cd /workspace/parity-models/train
-python3 train_config.py config/example.json save
+python3 train_config.py config/mnist.json save
 ```
 
 **What output should you see?**
@@ -158,7 +154,7 @@ to files under the `save` directory (or whichever directory you passed in to
 the training command above). Results will be placed in a directory indexed
 by the configuration of our run. In the example above, this will be in:
 ```
-save/mnist/base-mlp/k2/mse/add/sub/
+save/mnist/base-mlp/k2/mse/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/
 ```
 
 This directory contains a number of files:
@@ -208,21 +204,6 @@ Others (those too large to be checked-in with Github) may be downloaded with:
 ```
 ./download_base_models.sh
 ```
-
-Once these datasets and base models have been downloaded, results found in the
-paper may be reproduced by running:
-```bash
-./experiments.sh
-```
-The output and structure of training should look similar to that in Quickstart
-above.
-
-This will save all accuracies and trained model files under the `save` directory
-(the script will create this).
-
-**NOTE:** This script will run many training configurations and many epochs and
-will likely take days to complete. If you are primarily interested in running a
-simple example, please see our [MNIST example](README.md).
 
 ## Making additions to this repository
 Want to explore adding a new encoder, decoder, base model, dataset, etc.?
