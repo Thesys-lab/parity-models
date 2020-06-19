@@ -62,7 +62,7 @@ not been tested using other versions.
 * CUDA 10.1, if using a GPU
 * Other packages in `requirements.txt`
 
-We stongly recommend using our provided [Dockerfile](dockerfiles/ParityModelDockerfile),
+We strongly recommend using our provided [Dockerfile](dockerfiles/ParityModelDockerfile),
 which installs all necessary prerequisites. We have tested this using Docker version 19.03.1.
 To build the image associated with this Dockerfile, run:
 ```bash
@@ -207,7 +207,7 @@ Others (those too large to be checked-in with Github) may be downloaded with:
 ./download_base_models.sh
 ```
 
-## Modififying this repository
+## Modifying this repository
 Want to explore adding a new encoder, decoder, base model, dataset, etc.?
 If so, check out the links below and raise an issue if you find the framework
 poorly suited for your desired change!
