@@ -1,5 +1,6 @@
-# Training parity models
-This repository contains the code used for training parity models.
+# Training parity models, encoders, and decoders
+This repository contains the code used for training parity models, encoders, and
+decoders for learning-based coded computation approaches.
 
 ## Background
 The figure below shows an example of our target setup:
@@ -83,6 +84,7 @@ model for localization tasks.
 * [data](data): Directory to which datasets will be downloaded.
 * [datasets](datasets): PyTorch `Dataset` implementations for generating samples for training
   the encoding and decoding functions.
+* [loss](loss): PyTorch loss function modifications used for learning encoders and decoders.
 * [util](util): Utility methods used throughout the repository.
 * [parity_model_trainer.py](parity_model_trainer.py): Top-level class for training a parity model.
 * [train_config.py](train_config.py): Script to configure and launch a training run.
@@ -121,7 +123,7 @@ python3 train_config.py config/mnist.json save
 **What output should you see?**
 Provided all has gone well, you should see the following output appear:
 ```
-mnist base-mlp 2 mse add sub
+mnist base-mlp 2 mse coders.summation.AdditionEncoder coders.summation.SubtractionDecoder
 Base model train accuracy is 59754 / 60000 = 0.9959
 Base model val accuracy is 59754 / 60000 = 0.9959
 Base model test accuracy is 9793 / 10000 = 0.9793
@@ -174,7 +176,7 @@ The files in this directory enable one to continue training from a checkpoint.
 Using the example above, we can continue training from the last epoch of our
 previous run with:
 ```bash
-python3 train_config.py config/your_config.json save --continue_from_file save/mnist/base-mlp/k2/mse/add/sub/current.pth
+python3 train_config.py config/your_config.json save --continue_from_file save/mnist/base-mlp/k2/mse/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/current.pth
 ```
 Please make sure the configuration at `config/your_config.json` matches that of the checkpoint file.
 
@@ -205,7 +207,7 @@ Others (those too large to be checked-in with Github) may be downloaded with:
 ./download_base_models.sh
 ```
 
-## Making additions to this repository
+## Modififying this repository
 Want to explore adding a new encoder, decoder, base model, dataset, etc.?
 If so, check out the links below and raise an issue if you find the framework
 poorly suited for your desired change!
