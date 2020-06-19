@@ -1,11 +1,11 @@
 {
   "num_epoch": 500,
   "k_vals": [2, 3, 4],
-  "enc_dec_types": [["mlp", "mlp"]],
+  "enc_dec_types": [["coders.conv.ConvEncoder", "coders.mlp.MLPDecoder"]],
   "datasets": ["mnist"],
   "models": ["base-mlp"],
   "losses": ["mse"],
   "train_encoder": true,
-  "train_decoder": true,
-  "train_parity_model": false
+  "train_parity_model": false,
+  "train_decoder": true
 }

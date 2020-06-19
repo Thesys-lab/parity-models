@@ -31,8 +31,8 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
             }
         },
 
-        "Encoder": encoder,
-        "Decoder": decoder,
+        "Encoder": { "class": encoder },
+        "Decoder": { "class": decoder },
 
         "base_model_file": base_model_file,
         "base_model_input_size": base_model_input_size,
@@ -52,41 +52,6 @@ def get_loss(loss_type):
         return {"class": "torch.nn.MSELoss"}
     else:
         raise Exception("Invalid loss type: {}".format(loss_type))
-
-
-def get_encoder(encoder_type, ec_k):
-    if encoder_type == "add":
-        return {
-            "class": "coders.summation.AdditionEncoder"
-        }
-    elif encoder_type == "concat":
-        return {
-            "class": "coders.image.ConcatenationEncoder"
-        }
-    elif encoder_type == "mlp":
-        return {
-            "class": "coders.mlp.MLPEncoder"
-        }
-    elif encoder_type == "conv":
-        return {
-            "class": "coders.conv.ConvEncoder"
-        }
-
-    else:
-        raise Exception("Invalid encoder type: {}".format(encoder_type))
-
-
-def get_decoder(decoder_type):
-    if decoder_type == "sub":
-        return {
-            "class": "coders.summation.SubtractionDecoder"
-        }
-    elif decoder_type == "mlp":
-        return {
-            "class": "coders.mlp.MLPDecoder"
-        }
-    else:
-        raise Exception("Invalid decoder type: {}".format(decoder_type))
 
 
 def get_base_model(dataset, base_model_type):
@@ -293,8 +258,6 @@ if __name__ == "__main__":
                         print(dataset, base_type,
                               ec_k, loss_type, enc, dec)
                         loss = get_loss(loss_type)
-                        encoder = get_encoder(enc, ec_k)
-                        decoder = get_decoder(dec)
                         model_file, base, input_size, ds = get_base_model(
                             dataset, base_type)
                         parity_model, pm_input_size = get_parity_model(
@@ -310,8 +273,8 @@ if __name__ == "__main__":
 
                         save_dir = os.path.join(
                             args.overall_save_dir, suffix_dir)
-                        config_map = get_config(num_epoch, ec_k, loss, encoder,
-                                                decoder, model_file, base,
+                        config_map = get_config(num_epoch, ec_k, loss, enc,
+                                                dec, model_file, base,
                                                 ds, save_dir, input_size,
                                                 parity_model, args.only_test,
                                                 cfg)

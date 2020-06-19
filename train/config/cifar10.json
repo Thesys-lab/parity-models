@@ -1,8 +1,11 @@
 {
   "num_epoch": 1000,
   "k_vals": [2, 3, 4],
-  "enc_dec_types": [["add", "sub"]],
+  "enc_dec_types": [["coders.summation.AdditionEncoder", "coders.summation.SubtractionDecoder"]],
   "datasets": ["cifar10"],
   "models": ["resnet18"],
-  "losses": ["mse"]
+  "losses": ["mse"],
+  "train_encoder": false,
+  "train_parity_model": true,
+  "train_decoder": false
 }
