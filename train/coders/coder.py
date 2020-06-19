@@ -58,17 +58,19 @@ class Encoder(Coder):
     def forward(self, in_data):
         pass
 
-    def pre_tensor_transforms(self):
+    def resize_transform(self):
         """
         Returns
         -------
-            List of `torchvision.transforms.Transform` objects that should be
-            applied to data samples prior to being encoded. The transformations
+            A `torchvision.transforms.Transform` object that should be
+            applied to data samples prior to being encoded. This transformation
             will be performed just before the data sample has been reformatted
-            as a PyTorch `Tensor` object using
-            `torchvision.transforms.ToTennsor()`.
+            as a PyTorch `Tensor` object using `torchvision.transforms.ToTensor()`.
+            This method only needs to be implemented if the encoder takes in
+            images with a different size than those stored in the underlying
+            dataset.
         """
-        return []
+        return None
 
 
 class Decoder(Coder):

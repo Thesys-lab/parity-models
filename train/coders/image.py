@@ -63,11 +63,11 @@ class ConcatenationEncoder(Encoder):
 
         return out
 
-    def pre_tensor_transforms(self):
+    def resize_transform(self):
         """
         Returns
         -------
-            List containing a single tranform that resizes images to be the
-            size needed for concatenation.
+            A tranform that resizes images to be the size needed for
+            concatenation.
         """
-        return [transforms.Resize((self.resized_height, self.resized_width))]
+        return transforms.Resize((self.resized_height, self.resized_width))

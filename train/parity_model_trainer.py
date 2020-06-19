@@ -307,10 +307,14 @@ class ParityModelTrainer(object):
                                     "ec_r": self.ec_r,
                                     "in_dim": base_model_input_size})
 
+        if self.encoder.resize_transform() is not None:
+            resize_transforms = [self.encoder.resize_transform()]
+        else:
+            resize_transforms = []
         trdl, vdl, tsdl = get_dataloaders(config_map["Dataset"],
                                           self.base_model, self.ec_k,
                                           self.batch_size,
-                                          self.encoder.pre_tensor_transforms())
+                                          resize_transforms)
         self.train_dataloader = trdl
         self.val_dataloader = vdl
         self.test_dataloader = tsdl
