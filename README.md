@@ -26,15 +26,18 @@ and failures.
 Please see the READMEs in each of these subdirectories for more details.
 
 ## Cloning the repository
-The portion of the repository implementing ParM contains submodules.
-To ensure that all submodules are correctly cloned, please clone using:
+If you are only interested in the training portion of the repository, you
+can clone the repository as:
+```bash
+git clone https://github.com/Thesys-lab/parity-models.git
+```
+
+If you are intersted in running ParM, the prediction serving system employing
+parity models, you will need to clone required submodules using the
+`--recursive` flag:
 ```bash
 git clone --recursive https://github.com/Thesys-lab/parity-models.git
 ```
-
-If you are only interested in the training portion of the repository you need
-not use the `--recursive` flag. Omitting this flag should result in a faster
-clone.
 
 ## License
 ```
