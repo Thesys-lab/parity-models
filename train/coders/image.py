@@ -49,13 +49,13 @@ class ConcatenationEncoder(Encoder):
                 torch.zeros(batch_size, 1,
                             self.original_height, self.original_width))
 
-        reshaped = in_data.view(-1, self.num_in,
+        reshaped = in_data.view(-1, self.ec_k,
                                 self.resized_height, self.resized_width)
-        if self.num_in == 2:
+        if self.ec_k == 2:
             out[:, :, :, :self.resized_width] = reshaped[:, 0].unsqueeze(1)
             out[:, :, :, self.resized_width:] = reshaped[:, 1].unsqueeze(1)
         else:
-            # `num_in` = 4
+            # `ec_k` = 4
             out[:, :, :self.resized_height, :self.resized_width] = reshaped[:, 0].unsqueeze(1)
             out[:, :, :self.resized_height, self.resized_width:] = reshaped[:, 1].unsqueeze(1)
             out[:, :, self.resized_height:, :self.resized_width] = reshaped[:, 2].unsqueeze(1)

@@ -8,20 +8,20 @@ class Coder(nn.Module):
     decoders should derive from this class.
     """
 
-    def __init__(self, num_in, num_out, in_dim):
+    def __init__(self, ec_k, ec_r, in_dim):
         """
         Parameters
         ----------
-            num_in: int
-                Number of input units for a forward pass of the coder.
-            num_out: int
-                Number of output units from a forward pass of the coder.
+            ec_k: int
+                Parameter k to be used in coded computation
+            ec_r: int
+                Parameter r to be used in coded computation
             in_dim: list
                 List of sizes of input as (batch, num_channels, height, width).
         """
         super().__init__()
-        self.num_in = num_in
-        self.num_out = num_out
+        self.ec_k = ec_k
+        self.ec_r = ec_r
 
     def forward(self, in_data):
         """
@@ -39,8 +39,8 @@ class Encoder(Coder):
     class.
     """
 
-    def __init__(self, num_in, num_out, in_dim):
-        super().__init__(num_in, num_out, in_dim)
+    def __init__(self, ec_k, ec_r, in_dim):
+        super().__init__(ec_k, ec_r, in_dim)
         if len(in_dim) == 2:
             # Some `in_dim` values for square inputs with a single input
             # channel are represented using only a single value. We reconstruct
@@ -79,8 +79,8 @@ class Decoder(Coder):
     class.
     """
 
-    def __init__(self, num_in, num_out, in_dim):
-        super().__init__(num_in, num_out, in_dim)
+    def __init__(self, ec_k, ec_r, in_dim):
+        super().__init__(ec_k, ec_r, in_dim)
 
     def forward(self, in_data):
         pass

@@ -47,9 +47,9 @@ class ConvEncoder(Encoder):
         )
 
     def forward(self, in_data):
-        val = in_data.view(-1, self.num_in,
+        val = in_data.view(-1, self.ec_k,
                            self.in_dim[2], self.in_dim[3])
 
         out = self.nn(val)
-        out = out.view(val.size(0), self.num_out, -1)
+        out = out.view(val.size(0), self.ec_r, -1)
         return out
