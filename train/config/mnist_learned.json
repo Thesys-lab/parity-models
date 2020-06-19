@@ -1,7 +1,7 @@
 {
   "num_epoch": 500,
   "k_vals": [2, 3, 4],
-  "enc_dec_types": [["coders.conv.ConvEncoder", "coders.mlp.MLPDecoder"]],
+  "enc_dec_types": [["coders.mlp.MLPEncoder", "coders.mlp.MLPDecoder"]],
   "datasets": ["mnist"],
   "models": ["base-mlp"],
   "losses": ["mse"],
