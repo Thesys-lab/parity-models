@@ -3,7 +3,7 @@ This directory contains example configuration files used in training in the
 parity models framework.
 
 The training framework uses JSON files to configure training runs. These JSON
-files are parsed by the [train_config.py](../train_config.py) script to launch
+files are parsed by the [train.py](../train.py) script to launch
 training jobs.
 
 ## Configuration parameters

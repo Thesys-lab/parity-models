@@ -35,7 +35,7 @@ model for localization tasks.
 * [loss](loss): PyTorch loss function modifications used for learning encoders and decoders.
 * [util](util): Utility methods used throughout the repository.
 * [parity_model_trainer.py](parity_model_trainer.py): Top-level class for training a parity model.
-* [train_config.py](train_config.py): Script to configure and launch a training run.
+* [train.py](train.py): Script to configure and launch a training run.
 
 ## Running a training job
 We first describe how to run a simple training experiment and then provide
@@ -65,7 +65,7 @@ docker run -it --rm -v /path/to/parity-models:/workspace/parity-models parity-mo
 ```bash
 # These commands should be run from within the Docker container
 cd /workspace/parity-models/train
-python3 train_config.py config/mnist.json save
+python3 train.py config/mnist.json save
 ```
 
 **What output should you see?**
@@ -120,7 +120,7 @@ The files in this directory enable one to continue training from a checkpoint.
 Using the example above, we can continue training from the last epoch of our
 previous run with:
 ```bash
-python3 train_config.py config/your_config.json save --continue_from_file save/mnist/base-mlp/k2/mse/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/current.pth
+python3 train.py config/your_config.json save --continue_from_file save/mnist/base-mlp/k2/mse/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/current.pth
 ```
 Please make sure the configuration at `config/your_config.json` matches that of the checkpoint file.
 

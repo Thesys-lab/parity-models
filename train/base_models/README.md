@@ -13,7 +13,7 @@ perform the following steps:
    which a forward pass is performed.
 2. Train your base model and save the base model's state dictionary to a file.
    This may be done using `torch.save(my_base_model.state_dict(), "model.t7")`
-3. Create a new entry in [train_config.py](../train_config.py) under `get_base_model` and `get_parity_model`. Note the following requirements: 
+3. Create a new entry in [train.py](../train.py) under `get_base_model` and `get_parity_model`. Note the following requirements: 
    1. `base_path`: Specify the path to the state dictionary saved in step (2).
    2. `class`: Specify the classpath of your base model in the "class" field
    and any arguments required for the `__init__` function in the "args" field.
