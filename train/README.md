@@ -71,7 +71,7 @@ python3 train.py config/mnist.json save
 **What output should you see?**
 Provided all has gone well, you should see the following output appear:
 ```
-mnist base-mlp 2 mse coders.summation.AdditionEncoder coders.summation.SubtractionDecoder
+mnist base-mlp 2 torch.nn.MSELoss coders.summation.AdditionEncoder coders.summation.SubtractionDecoder
 Base model train accuracy is 59754 / 60000 = 0.9959
 Base model test accuracy is 9793 / 10000 = 0.9793
 Epoch 0. train. Top-1=0.1634, Top-5=0.6181, Loss=163.7766: 100%|###############################################################################| 430/430 [00:02<00:00, 196.08it/s]
@@ -100,7 +100,7 @@ to files under the `save` directory (or whichever directory you passed in to
 the training command above). Results will be placed in a directory indexed
 by the configuration of our run. In the example above, this will be in:
 ```
-save/mnist/base-mlp/k2/mse/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/
+save/mnist/base-mlp/k2/torch.nn.MSELoss/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/
 ```
 
 This directory contains a number of files:
