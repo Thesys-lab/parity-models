@@ -8,7 +8,7 @@ from parity_model_trainer import ParityModelTrainer
 
 def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
                base, dataset, save_dir, base_model_input_size, parity_model,
-               only_test, cfg):
+               only_test, loss_from_true_labels, cfg):
     if ec_k == 2:
         mb_size = 64
     else:
@@ -41,17 +41,24 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
         "ParityModel": parity_model,
         "Dataset": dataset,
 
-        "train_encoder": cfg.get("train_encoder", False),
-        "train_decoder": cfg.get("train_decoder", False),
-        "train_parity_model": cfg.get("train_parity_model", True),
+        "loss_from_true_labels": loss_from_true_labels,
+        "train_encoder": cfg["train_encoder"],
+        "train_decoder": cfg["train_decoder"],
+        "train_parity_model": cfg["train_parity_model"],
     }
 
 
-def get_loss(loss_type):
-    if loss_type == "mse":
-        return {"class": "torch.nn.MSELoss"}
-    else:
-        raise Exception("Invalid loss type: {}".format(loss_type))
+def get_loss(loss_type, cfg):
+    from_true_labels = False
+    if "KLDivLoss" in loss_type or "CrossEntropy":
+        if not cfg["train_encoder"] or not cfg["train_decoder"]:
+            raise Exception(
+                    "{} currently only supported for learned encoders and decoders".format(loss_type))
+
+    if "CrossEntropy" in loss_type:
+        from_true_labels = True
+
+    return {"class": loss_type}, from_true_labels
 
 
 def get_base_model(dataset, base_model_type):
@@ -257,7 +264,7 @@ if __name__ == "__main__":
                     for enc, dec in cfg["enc_dec_types"]:
                         print(dataset, base_type,
                               ec_k, loss_type, enc, dec)
-                        loss = get_loss(loss_type)
+                        loss, loss_from_true_labels = get_loss(loss_type, cfg)
                         model_file, base, input_size, ds = get_base_model(
                             dataset, base_type)
                         parity_model, pm_input_size = get_parity_model(
@@ -277,6 +284,7 @@ if __name__ == "__main__":
                                                 dec, model_file, base,
                                                 ds, save_dir, input_size,
                                                 parity_model, args.only_test,
+                                                loss_from_true_labels,
                                                 cfg)
 
                         if args.continue_from_file:

@@ -4,7 +4,7 @@
   "enc_dec_types": [["coders.image.ConcatenationEncoder", "coders.summation.SubtractionDecoder"]],
   "datasets": ["mnist"],
   "models": ["base-mlp", "resnet18"],
-  "losses": ["mse"],
+  "losses": ["torch.nn.MSELoss"],
   "train_encoder": false,
   "train_parity_model": true,
   "train_decoder": false

@@ -235,7 +235,15 @@ class ParityModelTrainer(object):
         # the original output was available.
         if self.train_decoder:
             predictions = decoded.view(-1, out_dim)
-            loss = self.loss_fn(predictions, labels.view(-1, out_dim),
+
+            # Prepare appropriate targets for loss depending on whether we're
+            # calculating loss with respect to base model outputs or with
+            # respect to true labels.
+            if self.loss_from_true_labels:
+                targets = true_labels.view(-1)
+            else:
+                targets = labels.view(-1, out_dim)
+            loss = self.loss_fn(predictions, targets,
                                 mb_amask.view(-1).float())
 
         stats.update_loss(loss.item())
@@ -319,6 +327,7 @@ class ParityModelTrainer(object):
         self.val_dataloader = vdl
         self.test_dataloader = tsdl
 
+        self.loss_from_true_labels = config_map["loss_from_true_labels"]
         self.train_parity_model = config_map["train_parity_model"]
         self.train_encoder = config_map["train_encoder"]
         self.train_decoder = config_map["train_decoder"]

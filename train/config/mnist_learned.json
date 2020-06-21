@@ -4,7 +4,7 @@
   "enc_dec_types": [["coders.mlp.MLPEncoder", "coders.mlp.MLPDecoder"]],
   "datasets": ["mnist"],
   "models": ["base-mlp"],
-  "losses": ["mse"],
+  "losses": ["torch.nn.MSELoss"],
   "train_encoder": true,
   "train_parity_model": false,
   "train_decoder": true

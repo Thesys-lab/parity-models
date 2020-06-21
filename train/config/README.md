@@ -46,9 +46,9 @@ configuration file, [mnist.json](mnist.json):
               same as that for the base model, but we can modify this if a
               need arises.
 * **losses**: A list of loss values to use. The only supported loss function
-              at this time is "mse," which corresponds to the PyTorch loss
-              function [torch.nn.MSELoss](https://pytorch.org/docs/master/generated/torch.nn.MSELoss.html).
-              Other loss functions can be added if a need arises.
+              at this time are [torch.nn.MSELoss](https://pytorch.org/docs/master/generated/torch.nn.MSELoss.html),
+              [loss.kldiv.KLDivLoss](../loss/kldiv.py), and [torch.nn.CrossEntropyLoss](https://pytorch.org/docs/master/generated/torch.nn.CrossEntropyLoss.html). The latter two are only supported if `train_encoder` and `train_decoder`
+              (described below) are set to `true`.
 * **train_encoder**: Whether the encoder should be trained. Currently, this should
                      be set to `true` only if the encoder is [coders.mlp.MLPEncoder](../coders/mlp.py)
                      or [coders.conv.ConvEncoder](../coders/conv.py).
