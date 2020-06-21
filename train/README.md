@@ -2,59 +2,7 @@
 This repository contains the code used for training parity models, encoders, and
 decoders for learning-based coded computation approaches.
 
-## Background
-The figure below shows an example of our target setup:
-![alt text](img/parity_model_setup.png "Parity Model Setup")
-
-Consider two copies of a machine learning model that have been deployed for inference
-on separate servers. We call these models "base models." The overall goal of performing
-inference is to perform inference over copies of the base model in response to queries
-in order to return predictions.
-
-We would like this setup to be resilient to one of the servers holding a copy of the
-base model experiencing slowdown or failure. In order to do so, we will add a third
-model, called a "parity model," along with an encoder and a decoder. The encoder
-will operate over two queries dispatched to the base models and construct a "parity query."
-The parity query will be dispatched for inference over the parity model in order
-to return a parity prediction. The decoder uses the parity prediction along with
-the any one out of two predictions that are to be returned from the base models
-in order to reconstruct the unavailable prediction. In the example above, the
-prediction from the second copy of the base model is slow/failed. The decoder
-uses the prediction from the first copy of the base model along with the
-parity prediction in order to reconstruct the second, unavailable, prediction.
-
-This repository contains the framework for training a parity model in order
-to enable accurate reconstruction of unavailable predictions.
-
-### General parameters
-More generally, we can have `k` copies of a deployed model and we would like to
-be resilient to `r` of these copies being "unavailable" (i.e., slow/failed).
-The encoder `E` takes as input `k` queries and returns `r` parity queries. These
-`r` parity queries are dispatched to `r` different parity models. The decoder
-takes as input any `k` out of the total `(k+r)` possible base model and parity
-model predictions in order to reconstruct any `r` predictions being unavailable.
-This project has mostly looked into the case where `r=1`, that is, when only
-one prediction is unavailable at a time.
-
-### Training a parity model
-Consider the following simple setup. Let `F` denote the base model over which
-we'd like to impart resilience and `Fp` denote a parity model. Suppose we
-are parameterized with `k=3`, and denote `X1`, `X2`, and `X3` as queries,
-with corresponding predictions being `F(X1)`, `F(X2)`, `F(X3)`. Let the
-encoder perform summation as encoding: parity `P` is constructed as
-`P = X1 + X2 + X3`. Let the decoder perform subtraction in attempt to
-recover an unavailable prediction: if `F(X2)` is unavailable, the decoder
-will attempt to reconstruct it as `F(X2)_recon = Fp(P) - F(X1) - F(X2)`.
-
-From the encoder and decoder described above, we can see that accurate
-reconstruction `F(X2)_recon = F(X2)` can be achieved when it is the case that:
-`Fp(X1 + X2 + X3) = F(X1) + F(X2) + F(X3)`. In order to train a parity model `Fp`,
-we can therefore sample many different combinations of `X1`, `X2`, and `X3` from
-a target dataset, compute `Fp(X1 + X2 + X3)`, and compare it to ` F(X1) + F(X2) + F(X3)`
-using some distance metric as a loss function.
-
-## This repository
-### Software requirements
+## Software requirements
 This repository was developed using the following versions of software and has
 not been tested using other versions.
 * Python 3.6.5
@@ -73,7 +21,7 @@ docker build -t parity-models-pytorch -f ParityModelDockerfile .
 If you would like to train on a GPU using the provided docker container, then
 you will need to install [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker).
 
-### Repository structure
+## Repository structure
 * [base_models](base_models): Implementations of different 
 * [base_model_trained_files](base_model_trained_files): PyTorch model state dictionaries containing
   trained parameters for the base models.
@@ -139,8 +87,8 @@ Let's walk through these step-by-step:
    using mean-squared-error as loss, using the addition encoder and subtraction
    decoder.
 * `Base model train accuracy is 59754 / 60000 = 0.9959`: These lines show the
-   accuracy of the base model (`F` in [Background](#Background)) on the
-   training and test datasets.
+   accuracy of the original model which coded computation over which coded computation
+   imparts resilience on the training and test datasets.
 * `Epoch 0. train. ...`: When these lines run, we're actually training! For
    each epoch, we print the current progress, top-1 and top-5 accuracies,
    and current average loss. We print these for both training and validation

@@ -1,15 +1,22 @@
-# Parity Models
-This repository contains the code used for developing and evaluating parity
-models. A parity model is a computational unit that enables the use of ideas
-from erasure coding to impart resilience against slowdowns and failures that
-occur in distributed data processing and serving environments.
+# Learning-Based Coded Computation
+Coded computation is an emerging approach that applies ideas from coding
+theory to impart resource-efficient resilience against slowdowns and failures
+that occur in large-scale distributed computing systems. This repository
+contains a framework for exploring the use of machine learning to apply
+coded computation to broader classes of computations. More background
+on coded computation, its challenges, and the potential for machine learning
+within coded computation is provided in [this blog post](https://github.com/Thesys-lab/parity-models).
 
-This repository focuses particularly on using ideas from erasure codes to
-impart resilience to prediction serving systems performing inference with
-neural networks. For a brief overview of how a parity model enables this
-resilience, please see this [description](train/README.md). We will add a
-broader explanation of the function of a parity model to this README in the
-near future.
+This repository focuses primarily on applying learning-based coded computation to
+impart resilience to distributed systems performing inference with neural
+networks.
+
+This repository contains the code used for the following papers:
+* [Learning-Based Coded Computation](https://ieeexplore.ieee.org/document/9047948). Jack Kosaian, K. V. Rashmi, and Shivaram Venkataraman. In IEEE Journal on Selected Areas in Information Theory, 2020
+
+* [Parity Models: Erasure-Coded Resilience for Prediction Serving Systems](https://dl.acm.org/doi/10.1145/3341301.3359654). Jack Kosaian, K. V. Rashmi, and Shivaram Venkataraman. In Proceedings of the 27th ACM Symposium on Operating Systems Principles (SOSP), 2019
+
+* [Learning a Code: Machine Learning for Approximate Non-Linear Coded Computation](https://arxiv.org/abs/1806.01259). Jack Kosaian, K. V. Rashmi, and Shivaram Venkataraman. arXiv preprint arXiv:1806.01259, 2018
 
 This repository originated as the artifact associated with the SOSP 2019 paper
 [Parity Models: Erasure-Coded Resilience for Prediction Serving Systems](https://dl.acm.org/doi/10.1145/3341301.3359654).
