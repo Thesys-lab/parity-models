@@ -125,7 +125,6 @@ Provided all has gone well, you should see the following output appear:
 ```
 mnist base-mlp 2 mse coders.summation.AdditionEncoder coders.summation.SubtractionDecoder
 Base model train accuracy is 59754 / 60000 = 0.9959
-Base model val accuracy is 59754 / 60000 = 0.9959
 Base model test accuracy is 9793 / 10000 = 0.9793
 Epoch 0. train. Top-1=0.1634, Top-5=0.6181, Loss=163.7766: 100%|###############################################################################| 430/430 [00:02<00:00, 196.08it/s]
 Epoch 0. val. Top-1=0.2862, Top-5=0.7554, Loss=116.5788: 100%|###################################################################################| 40/40 [00:00<00:00, 315.57it/s]
@@ -141,10 +140,7 @@ Let's walk through these step-by-step:
    decoder.
 * `Base model train accuracy is 59754 / 60000 = 0.9959`: These lines show the
    accuracy of the base model (`F` in [Background](#Background)) on the
-   training, validation, and test datasets. Note that the accuracy for the
-   training and validation sets will always look the same -- we partition the
-   official training datasets into a "training" and "validation" split after
-   this line has been printed. Sorry for this being confusing :(
+   training and test datasets.
 * `Epoch 0. train. ...`: When these lines run, we're actually training! For
    each epoch, we print the current progress, top-1 and top-5 accuracies,
    and current average loss. We print these for both training and validation

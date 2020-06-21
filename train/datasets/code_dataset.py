@@ -81,8 +81,14 @@ class CodeDataset(data.Dataset):
         base_model_num_correct = torch.sum(correct_preds).item()
         base_model_num_tried = self.outputs.size(0)
         base_model_accuracy = base_model_num_correct / base_model_num_tried
-        print("Base model", name, "accuracy is", base_model_num_correct,
-              "/", base_model_num_tried, "=", base_model_accuracy)
+
+        # We don't print the accuracy for the validation dataset because we
+        # only split the training set into a training and validation set
+        # after getting all inference results from the training dataset.
+        # Printing accuracy for the validation dataset can lead to confusion.
+        if name != "val":
+            print("Base model", name, "accuracy is", base_model_num_correct,
+                  "/", base_model_num_tried, "=", base_model_accuracy)
 
         self.true_labels = self.true_labels.long()
         if put_gpu:
