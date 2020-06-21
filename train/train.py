@@ -50,7 +50,7 @@ def get_config(num_epoch, ec_k, loss, encoder, decoder, base_model_file,
 
 def get_loss(loss_type, cfg):
     from_true_labels = False
-    if "KLDivLoss" in loss_type or "CrossEntropy":
+    if "KLDivLoss" in loss_type or "CrossEntropy" in loss_type:
         if not cfg["train_encoder"] or not cfg["train_decoder"]:
             raise Exception(
                     "{} currently only supported for learned encoders and decoders".format(loss_type))
