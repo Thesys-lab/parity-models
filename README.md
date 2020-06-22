@@ -5,7 +5,7 @@ that occur in large-scale distributed computing systems. This repository
 contains a framework for exploring the use of machine learning to apply
 coded computation to broader classes of computations. More background
 on coded computation, its challenges, and the potential for machine learning
-within coded computation is provided in [this blog post](https://github.com/Thesys-lab/parity-models).
+within coded computation is provided in [this blog post](https://deepcomm.github.io/jekyll/pixyll/2020/06/22/learned-coded-computation-part1/).
 
 This repository focuses primarily on applying learning-based coded computation to
 impart resilience to distributed systems performing inference with neural
