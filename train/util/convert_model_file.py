@@ -1,7 +1,6 @@
 import argparse
 from collections import OrderedDict
 import torch
-import pdb
 
 
 def convert(pth, outfile):
