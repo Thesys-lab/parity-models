@@ -245,8 +245,9 @@ if __name__ == "__main__":
                         help="Path to file containing previous training state.")
     parser.add_argument("--checkpoint_cycle", type=int, default=1,
                         help="Number of epochs between model checkpoints")
-    parser.add_argument("--only_test", help="Run only the test. --continue_with_path option must also be set",
-                    action="store_true")
+    parser.add_argument("--only_test", action="store_true",
+                        help="Run only the test. --continue_from_file option "
+                             "must also be set")
     args = parser.parse_args()
 
     with open(args.config_file, 'r') as infile:
