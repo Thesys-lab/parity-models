@@ -22,20 +22,21 @@ If you would like to train on a GPU using the provided docker container, then
 you will need to install [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker).
 
 ## Repository structure
-* [base_models](base_models): Implementations of different 
+* [base_models](base_models): Implementations of different base neural networks used for performing the original
+  inference task as well as the task of a parity model
 * [base_model_trained_files](base_model_trained_files): PyTorch model state dictionaries containing
-  trained parameters for the base models.
-* [coders](coders): Implementations of simple encoding and decoding functions.
-* [config](config): Configurations for training using the datasets shown in evaluation.
+  trained parameters for the base models
+* [coders](coders): Implementations of simple encoding and decoding functions
+* [config](config): Configurations for training
 * [cub-localization](cub-localization): Instructions for training a parity
-model for localization tasks.
-* [data](data): Directory to which datasets will be downloaded.
+  model for localization tasks
+* [data](data): Directory to which datasets (e.g., MNIST, CIFAR-10) will be downloaded
 * [datasets](datasets): PyTorch `Dataset` implementations for generating samples for training
-  the encoding and decoding functions.
-* [loss](loss): PyTorch loss function modifications used for learning encoders and decoders.
-* [util](util): Utility methods used throughout the repository.
-* [parity_model_trainer.py](parity_model_trainer.py): Top-level class for training a parity model.
-* [train.py](train.py): Script to configure and launch a training run.
+  the encoding and decoding functions and parity models
+* [loss](loss): PyTorch loss function modifications used for learning encoders and decoders
+* [util](util): Utility methods used throughout the repository
+* [parity_model_trainer.py](parity_model_trainer.py): Top-level class for training a parity model and/or encoders and decoders
+* [train.py](train.py): Script to configure and launch a training run
 
 ## Running a training job
 We first describe how to run a simple training experiment and then provide
