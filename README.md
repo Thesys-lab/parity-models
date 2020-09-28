@@ -22,7 +22,7 @@ This repository originated as the artifact associated with the SOSP 2019 paper
 [Parity Models: Erasure-Coded Resilience for Prediction Serving Systems](https://dl.acm.org/doi/10.1145/3341301.3359654).
 It has since evolved beyond serving this paper in isolation. The original
 artifact associated with the SOSP 2019 paper is located in the
-`sosp2019-artifact` branch.
+[sosp2019-artifact branch](https://github.com/Thesys-lab/parity-models/tree/sosp2019-artifact).
 
 ## Repository structure
 * [train](train): Code for training a neural network parity model
