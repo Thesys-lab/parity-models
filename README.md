@@ -27,7 +27,7 @@ artifact associated with the SOSP 2019 paper is located in the
 ## Repository structure
 * [train](train): Code for training a neural network parity model
 * [clipper-parm](clipper-parm): Code for ParM, a prediction serving system that
-employs learning-based coded computation to impart erasure-coding-based resilience to slowdowns
+employs learning-based coded computation to impart resilience against slowdowns
 and failures. For more details, see [our paper.](https://dl.acm.org/doi/10.1145/3341301.3359654)
 
 Please see the READMEs in each of these subdirectories for more details.
