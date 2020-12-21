@@ -65,5 +65,5 @@ limitations under the License.
 
 ## Support
 We graciously acknowledge support from the National Science Foundation 
-(NSF) under grant CNS-1850483 and an NSF Graduate Research Fellowship 
-(DGE-1745016 and DGE-1252522).
+(NSF) under grant CNS-1850483, an NSF Graduate Research Fellowship 
+(DGE-1745016 and DGE-1252522), and Amazon Web Services.
