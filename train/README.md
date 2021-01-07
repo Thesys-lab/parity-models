@@ -66,13 +66,13 @@ docker run -it --rm -v /path/to/parity-models:/workspace/parity-models parity-mo
 ```bash
 # These commands should be run from within the Docker container
 cd /workspace/parity-models/train
-python3 train.py config/mnist.json save
+python3 train.py config/mnist-concat.json save
 ```
 
 **What output should you see?**
 Provided all has gone well, you should see the following output appear:
 ```
-mnist base-mlp 2 torch.nn.MSELoss coders.summation.AdditionEncoder coders.summation.SubtractionDecoder
+mnist base-mlp 2 torch.nn.MSELoss coders.image.ConcatenationEncoder coders.summation.SubtractionDecoder
 Base model train accuracy is 59754 / 60000 = 0.9959
 Base model test accuracy is 9793 / 10000 = 0.9793
 Epoch 0. train. Top-1=0.1634, Top-5=0.6181, Loss=163.7766: 100%|###############################################################################| 430/430 [00:02<00:00, 196.08it/s]
@@ -82,10 +82,10 @@ Epoch 1. val. Top-1=0.5138, Top-5=0.9122, Loss=66.1130: 100%|###################
 Epoch 2. train. Top-1=0.5585, Top-5=0.9221, Loss=62.2081:  36%|############################6                                                   | 154/430 [00:00<00:01, 195.82it/s
 ```
 Let's walk through these step-by-step:
-* `mnist base-mlp 2 mse add sub`: This line prints information about the
+* `mnist base-mlp 2 torch.nn.MSELoss coders.image.ConcatenationEncoder coders.summation.SubtractionDecoder`: This line prints information about the
    configuration currently being trained. In this case, this indicates that
    we are training with the MNIST dataset using an MLP model, with k=2,
-   using mean-squared-error as loss, using the addition encoder and subtraction
+   using mean-squared-error as loss, using the concatenation encoder and subtraction
    decoder.
 * `Base model train accuracy is 59754 / 60000 = 0.9959`: These lines show the
    accuracy of the original model which coded computation over which coded computation
@@ -101,7 +101,7 @@ to files under the `save` directory (or whichever directory you passed in to
 the training command above). Results will be placed in a directory indexed
 by the configuration of our run. In the example above, this will be in:
 ```
-save/mnist/base-mlp/k2/torch.nn.MSELoss/coders.summation.AdditionEncoder/coders.summation.SubtractionDecoder/
+save/mnist/base-mlp/k2/torch.nn.MSELoss/coders.image.ConcatenationEncoder/coders.summation.SubtractionDecoder/
 ```
 
 This directory contains a number of files:
@@ -151,6 +151,12 @@ Others (those too large to be checked-in with Github) may be downloaded with:
 ```
 ./download_base_models.sh
 ```
+
+## Suggestions for best accuracy
+For image-based datasets, parity models currently achieve highest accuracy when
+using the concatenation-based encoder. Examples of using the concatenation-based
+encoder are located in the [config](config) directory in files with the `-concat`
+suffix.
 
 ## Modifying this repository
 Want to explore adding a new encoder, decoder, base model, dataset, etc.?

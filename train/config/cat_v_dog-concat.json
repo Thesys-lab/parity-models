@@ -1,0 +1,11 @@
+{
+  "num_epoch": 1000,
+  "k_vals": [2, 4],
+  "enc_dec_types": [["coders.image.ConcatenationEncoder", "coders.summation.SubtractionDecoder"]],
+  "datasets": ["cat_v_dog"],
+  "models": ["resnet18"],
+  "losses": ["torch.nn.MSELoss"],
+  "train_encoder": false,
+  "train_parity_model": true,
+  "train_decoder": false
+}

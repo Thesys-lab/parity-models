@@ -1,0 +1,11 @@
+{
+  "num_epoch": 500,
+  "k_vals": [2, 4],
+  "enc_dec_types": [["coders.image.ConcatenationEncoder", "coders.summation.SubtractionDecoder"]],
+  "datasets": ["fashion-mnist"],
+  "models": ["base-mlp", "resnet18"],
+  "losses": ["torch.nn.MSELoss"],
+  "train_encoder": false,
+  "train_parity_model": true,
+  "train_decoder": false
+}
