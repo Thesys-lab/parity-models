@@ -39,7 +39,7 @@ can clone the repository as:
 git clone https://github.com/Thesys-lab/parity-models.git
 ```
 
-If you are intersted in running ParM, the prediction serving system employing
+If you are interested in running ParM, the prediction serving system employing
 parity models, you will need to clone required submodules using the
 `--recursive` flag:
 ```bash
