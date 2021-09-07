@@ -1,4 +1,7 @@
 # Learning-Based Coded Computation
+
+![alt text](fig/parity-models.png "Example of a parity model with k=2")
+
 Coded computation is an emerging approach that applies ideas from coding
 theory to impart resource-efficient resilience against slowdowns and failures
 that occur in large-scale distributed computing systems. This repository
